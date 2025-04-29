@@ -35,16 +35,16 @@ class AuthService
     public function login(array $credentials)
     {
         $rememberMe = $credentials['remember_me'] ?? false;
-    
+
         $user = $this->userRepository->findByName($credentials['name']);
-    
+
         if (!$user || !Hash::check($credentials['password'], $user->password)) {
             return null;
         }
-    
+
         return $this->generateTokenResponse($user, $rememberMe);
     }
-    
+
 
     public function logout()
     {
