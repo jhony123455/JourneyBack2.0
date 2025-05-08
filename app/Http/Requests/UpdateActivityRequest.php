@@ -22,10 +22,11 @@ class UpdateActivityRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'title' => 'sometimes|string|max:255',
-            'start' => 'sometimes|date',
-            'end' => 'sometimes|date',
-            'tag_id' => 'nullable|integer|exists:tags,id',
+            'title' => 'required|string|max:255',
+            'description' => 'nullable|string',
+            'tags' => 'array',
+            'color' => 'required|string',
+            'tags.*' => 'exists:tags,id'
             // otros campos opcionales
         ];
     }

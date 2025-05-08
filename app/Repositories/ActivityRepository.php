@@ -20,14 +20,25 @@ class ActivityRepository implements ActivityRepositoryInterface
 
     public function create(array $data)
     {
-        return Activity::create($data);
+        $tags = $data['tags'] ?? [];
+        unset($data['tags']);
+
+        $activity = Activity::create($data);
+        $activity->tags()->sync($tags);
+
+        return $activity->load('tags');
     }
 
     public function update($id, array $data)
     {
+        $tags = $data['tags'] ?? [];
+        unset($data['tags']);
+
         $activity = $this->find($id);
         $activity->update($data);
-        return $activity;
+        $activity->tags()->sync($tags);
+
+        return $activity->load('tags');
     }
 
     public function delete($id)

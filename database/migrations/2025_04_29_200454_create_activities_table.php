@@ -16,8 +16,6 @@ return new class extends Migration
             $table->string('title');
             $table->text('description');
             $table->string('color')->default('#FFFFFF');
-            $table->timestamp('start_time');
-            $table->timestamp('end_time');
             $table->foreignId('user_id')->constrained()->onDelete('cascade');  
             $table->timestamps();
         });

@@ -6,7 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class Activity extends Model
 {
-    protected $fillable = ['title', 'description', 'color', 'start_time', 'end_time', 'user_id'];
+    protected $fillable = ['title', 'description', 'color', 'user_id'];
 
     public function tags()
     {

@@ -11,7 +11,7 @@ class StoreTagRequest extends FormRequest
      */
     public function authorize(): bool
     {
-        return false;
+        return true;
     }
 
     /**
@@ -23,7 +23,7 @@ class StoreTagRequest extends FormRequest
     {
         return [
             'name' => ['required', 'string', 'max:255'],
-            'color' => ['required', 'string', 'max:7'], // Ej: "#FF0000"
+            'color' => ['required', 'string', 'max:30'], // Ej: "rgba(200, 23, 213, 1)
         ];
     }
 }

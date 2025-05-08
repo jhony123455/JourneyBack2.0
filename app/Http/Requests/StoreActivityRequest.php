@@ -23,9 +23,10 @@ class StoreActivityRequest extends FormRequest
     {
         return [
             'title' => 'required|string|max:255',
-            'start' => 'required|date',
-            'end' => 'nullable|date',
-            'tag_id' => 'nullable|integer|exists:tags,id',
+            'description' => 'nullable|string',
+            'tags' => 'array',
+            'color' => 'required|string',
+            'tags.*' => 'exists:tags,id'
             // otros campos opcionales
         ];
     }
