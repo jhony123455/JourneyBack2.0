@@ -10,12 +10,14 @@ class ActivityRepository implements ActivityRepositoryInterface
 {
     public function all()
     {
-        return Activity::all();
+        return Activity::where('user_id', auth('api')->id())->get();
     }
 
     public function find($id)
     {
-        return Activity::findOrFail($id);
+        return Activity::where('id', $id)
+        ->where('user_id', auth('api')->id())
+        ->firstOrFail();
     }
 
     public function create(array $data)

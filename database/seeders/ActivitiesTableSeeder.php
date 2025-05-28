@@ -3,75 +3,79 @@
 namespace Database\Seeders;
 
 use App\Models\User;
-use Carbon\Carbon;
-use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\DB;
 
 class ActivitiesTableSeeder extends Seeder
 {
-    /**
-     * Run the database seeds.
-     */
     public function run(): void
     {
-        $userId = User::first()->id ?? 1;
-
-        // Crear fechas para las actividades
-        $now = Carbon::now();
-        $startTime1 = $now->copy()->addHours(1);
-        $endTime1 = $startTime1->copy()->addHours(2);
-
-        $startTime2 = $now->copy()->addHours(3);
-        $endTime2 = $startTime2->copy()->addHours(1);
-
-        $startTime3 = $now->copy()->addDays(1);
-        $endTime3 = $startTime3->copy()->addHours(3);
-
-        $activities = [
+        $users = User::all();
+        
+        // Definimos las actividades base con los IDs fijos de las etiquetas predefinidas
+        $baseActivities = [
             [
-                'id' => 1,
                 'title' => 'Reunión de equipo',
                 'description' => 'Reunión semanal con el equipo de desarrollo',
                 'color' => '#4da6ff',
-                'start_time' => $startTime1,
-                'end_time' => $endTime1,
-                'user_id' => $userId,
-                'created_at' => now(),
-                'updated_at' => now()
+                'tags' => [3], // ID 3 = Trabajo
             ],
             [
-                'id' => 2,
                 'title' => 'Llamada con cliente',
                 'description' => 'Presentación del avance del proyecto',
                 'color' => '#ff9933',
-                'start_time' => $startTime2,
-                'end_time' => $endTime2,
-                'user_id' => $userId,
-                'created_at' => now(),
-                'updated_at' => now()
+                'tags' => [3, 4], // ID 3 = Trabajo, ID 4 = Urgente
             ],
             [
-                'id' => 3,
                 'title' => 'Enviar informe',
                 'description' => 'Preparar y enviar informe mensual',
                 'color' => '#ff4d4d',
-                'start_time' => $startTime3,
-                'end_time' => $endTime3,
-                'user_id' => $userId,
-                'created_at' => now(),
-                'updated_at' => now()
+                'tags' => [1], // ID 1 = Importante
             ],
         ];
 
-        DB::table('activities')->insert($activities);
-        $activityTags = [
-            ['activity_id' => 1, 'tag_id' => 3], // Reunión de equipo - Trabajo
-            ['activity_id' => 2, 'tag_id' => 3], // Llamada con cliente - Trabajo
-            ['activity_id' => 2, 'tag_id' => 4], // Llamada con cliente - Urgente
-            ['activity_id' => 3, 'tag_id' => 1], // Enviar informe - Importante
-        ];
-
-        DB::table('activity_tag')->insert($activityTags);
+        // Verificar que existan las etiquetas globales predefinidas
+        $existingTagIds = DB::table('tags')->pluck('id')->toArray();
+        $allNeededTags = [];
+        foreach ($baseActivities as $activity) {
+            foreach ($activity['tags'] as $tagId) {
+                $allNeededTags[$tagId] = true;
+            }
+        }
+        
+        // Validar que todas las etiquetas necesarias existen
+        foreach (array_keys($allNeededTags) as $tagId) {
+            if (!in_array($tagId, $existingTagIds)) {
+                throw new \Exception("La etiqueta con ID {$tagId} no existe en la base de datos");
+            }
+        }
+        
+        // Ahora crear las actividades para cada usuario con las etiquetas predefinidas
+        foreach ($users as $user) {
+            $activityTagEntries = [];
+            
+            foreach ($baseActivities as $activity) {
+                $activityId = DB::table('activities')->insertGetId([
+                    'title' => $activity['title'],
+                    'description' => $activity['description'],
+                    'color' => $activity['color'],
+                    'user_id' => $user->id,
+                    'created_at' => now(),
+                    'updated_at' => now(),
+                ]);
+                
+                // Insertar las relaciones con las etiquetas predefinidas
+                foreach ($activity['tags'] as $tagId) {
+                    $activityTagEntries[] = [
+                        'activity_id' => $activityId,
+                        'tag_id' => $tagId,
+                    ];
+                }
+            }
+            
+            if (!empty($activityTagEntries)) {
+                DB::table('activity_tag')->insert($activityTagEntries);
+            }
+        }
     }
 }

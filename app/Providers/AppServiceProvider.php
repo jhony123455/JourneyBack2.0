@@ -8,6 +8,11 @@ use App\Interfaces\TagRepositoryInterface;
 use App\Repositories\TagRepository;
 use App\Interfaces\ActivityRepositoryInterface;
 use App\Repositories\ActivityRepository;
+use App\Interfaces\CalendarEventRepositoryInterface;
+use App\Models\User;
+use App\Observers\UserObserver;
+use App\Repositories\CalendarEventRepository;
+
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -18,6 +23,8 @@ class AppServiceProvider extends ServiceProvider
     {
         $this->app->bind(ActivityRepositoryInterface::class, ActivityRepository::class);
         $this->app->bind(TagRepositoryInterface::class, TagRepository::class);
+        $this->app->bind(CalendarEventRepositoryInterface::class, CalendarEventRepository::class);
+        
     }
 
     /**
@@ -25,6 +32,6 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
-        //
+        User::observe(UserObserver::class);
     }
 }

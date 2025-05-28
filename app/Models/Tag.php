@@ -12,4 +12,9 @@ class Tag extends Model
     {
         return $this->belongsToMany(Activity::class, 'activity_tag');
     }
+
+    public function user()
+    {
+        return $this->belongsTo(User::class);
+    }
 }

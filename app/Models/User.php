@@ -24,6 +24,18 @@ class User extends Authenticatable implements JWTSubject
         'fecha_registro'
     ];
 
+    public function activities()
+    {
+        return $this->hasMany(Activity::class);
+    }
+
+    public function tags()
+    {
+        return $this->hasMany(Tag::class);
+    }
+
+
+
     /**
      * The attributes that should be hidden for serialization.
      *

@@ -5,6 +5,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\TagController;
 use App\Http\Controllers\ActivityController;
+use App\Http\Controllers\CalendarEventController;
 
 Route::get('/user', function (Request $request) {
     return $request->user();
@@ -37,4 +38,12 @@ Route::prefix('activities')->middleware('auth:api')->group(function () {
     Route::post('/', [ActivityController::class, 'store']);
     Route::put('/{id}', [ActivityController::class, 'update']);
     Route::delete('/{id}', [ActivityController::class, 'destroy']);
+});
+
+Route::prefix('calendar-events')->middleware('auth:api')->group(function () {
+    Route::get('/', [CalendarEventController::class, 'index']);
+    Route::post('/', [CalendarEventController::class, 'store']);
+    Route::put('/{id}', [CalendarEventController::class, 'update']);
+    Route::delete('/{id}', [CalendarEventController::class, 'destroy']);
+    Route::get('/activity/{activityId}', [CalendarEventController::class, 'getEventsByActivity']);
 });
