@@ -12,6 +12,8 @@ use App\Interfaces\CalendarEventRepositoryInterface;
 use App\Models\User;
 use App\Observers\UserObserver;
 use App\Repositories\CalendarEventRepository;
+use App\Interfaces\DiaryEntryServiceInterface;
+use App\Services\DiaryEntryService;
 
 
 class AppServiceProvider extends ServiceProvider
@@ -24,7 +26,7 @@ class AppServiceProvider extends ServiceProvider
         $this->app->bind(ActivityRepositoryInterface::class, ActivityRepository::class);
         $this->app->bind(TagRepositoryInterface::class, TagRepository::class);
         $this->app->bind(CalendarEventRepositoryInterface::class, CalendarEventRepository::class);
-        
+        $this->app->bind(DiaryEntryServiceInterface::class, DiaryEntryService::class);
     }
 
     /**

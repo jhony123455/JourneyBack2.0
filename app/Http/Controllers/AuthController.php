@@ -29,7 +29,7 @@ class AuthController extends Controller
     {
         $result = $this->authService->login($request->validated());
         if (!$result) {
-            return response()->json([
+            return response()->json([   
                 'message' => 'Credenciales inválidas'
             ], 401);
         }

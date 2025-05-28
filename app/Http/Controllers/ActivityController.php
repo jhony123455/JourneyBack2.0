@@ -22,6 +22,7 @@ class ActivityController extends Controller
 
     public function store(StoreActivityRequest $request)
     {
+    
         $data = $request->validated();
         $data['user_id'] = auth('api')->id();
         return response()->json($this->activityService->create($data), 201);

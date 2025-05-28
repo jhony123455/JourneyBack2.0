@@ -6,6 +6,7 @@ use App\Http\Controllers\AuthController;
 use App\Http\Controllers\TagController;
 use App\Http\Controllers\ActivityController;
 use App\Http\Controllers\CalendarEventController;
+use App\Http\Controllers\DiaryEntryController;
 
 Route::get('/user', function (Request $request) {
     return $request->user();
@@ -46,4 +47,14 @@ Route::prefix('calendar-events')->middleware('auth:api')->group(function () {
     Route::put('/{id}', [CalendarEventController::class, 'update']);
     Route::delete('/{id}', [CalendarEventController::class, 'destroy']);
     Route::get('/activity/{activityId}', [CalendarEventController::class, 'getEventsByActivity']);
+});
+
+// Rutas para DiaryEntries
+Route::prefix('diary-entries')->middleware('auth:api')->group(function () {
+    Route::get('/', [DiaryEntryController::class, 'index']);
+    Route::post('/', [DiaryEntryController::class, 'store']);
+    Route::get('/{id}', [DiaryEntryController::class, 'show']);
+    Route::put('/{id}', [DiaryEntryController::class, 'update']);
+    Route::delete('/{id}', [DiaryEntryController::class, 'destroy']);
+    Route::get('/date-range', [DiaryEntryController::class, 'getByDateRange']);
 });

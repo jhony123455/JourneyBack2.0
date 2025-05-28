@@ -3,6 +3,7 @@
 namespace App\Observers;
 
 use App\Models\User;
+use Database\Seeders\DefaultDiaryColorsSeeder;
 use Illuminate\Support\Facades\DB;
 
 class UserObserver
@@ -57,8 +58,10 @@ class UserObserver
         if (!empty($activityTagEntries)) {
             DB::table('activity_tag')->insert($activityTagEntries);
         }
-    }
 
+        // Crear entradas del diario con colores predeterminados
+        DefaultDiaryColorsSeeder::createDefaultEntriesForUser($user->id);
+    }
 
     /**
      * Handle the User "updated" event.
