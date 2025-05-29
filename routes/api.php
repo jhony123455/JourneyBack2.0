@@ -7,6 +7,7 @@ use App\Http\Controllers\TagController;
 use App\Http\Controllers\ActivityController;
 use App\Http\Controllers\CalendarEventController;
 use App\Http\Controllers\DiaryEntryController;
+use App\Http\Controllers\ProfileController;
 
 Route::get('/user', function (Request $request) {
     return $request->user();
@@ -57,4 +58,11 @@ Route::prefix('diary-entries')->middleware('auth:api')->group(function () {
     Route::put('/{id}', [DiaryEntryController::class, 'update']);
     Route::delete('/{id}', [DiaryEntryController::class, 'destroy']);
     Route::get('/date-range', [DiaryEntryController::class, 'getByDateRange']);
+});
+
+// Rutas para el perfil
+Route::prefix('profile')->middleware('auth:api')->group(function () {
+    Route::get('/', [ProfileController::class, 'show']);
+    Route::put('/', [ProfileController::class, 'update']);
+    Route::get('/stats', [ProfileController::class, 'getStats']);
 });
