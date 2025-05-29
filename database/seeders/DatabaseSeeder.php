@@ -2,8 +2,6 @@
 
 namespace Database\Seeders;
 
-use App\Models\User;
-// use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 
 class DatabaseSeeder extends Seeder
@@ -13,11 +11,10 @@ class DatabaseSeeder extends Seeder
      */
     public function run(): void
     {
-
         $this->call([
             UsersTableSeeder::class,
-            TagsTableSeeder::class,
-            ActivitiesTableSeeder::class,
+            // No necesitamos TagsTableSeeder ni ActivitiesTableSeeder
+            // porque el UserObserver se encarga de crearlos
         ]);
     }
 }

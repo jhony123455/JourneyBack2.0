@@ -23,9 +23,15 @@ class UpdateCalendarEventRequest extends FormRequest
     {
         return [
             'activity_id' => 'sometimes|exists:activities,id',
+            'user_id' => 'sometimes|exists:users,id',
+            'title' => 'sometimes|string|max:255',
+            'description' => 'nullable|string',
+            'color' => 'sometimes|string|max:30',
             'start_date' => 'sometimes|date',
             'end_date' => 'nullable|date|after_or_equal:start_date',
             'all_day' => 'boolean',
+            'tags' => 'nullable|array',
+            'tags.*' => 'exists:tags,id'
         ];
     }
 }

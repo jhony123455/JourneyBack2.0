@@ -23,9 +23,15 @@ class CreateCalendarEventRequest extends FormRequest
     {
         return [
             'activity_id' => 'required|exists:activities,id',
+            'user_id' => 'required|exists:users,id',
+            'title' => 'required|string|max:255',
+            'description' => 'nullable|string',
+            'color' => 'required|string|max:30',
             'start_date' => 'required|date',
             'end_date' => 'nullable|date|after_or_equal:start_date',
             'all_day' => 'boolean',
+            'tags' => 'nullable|array',
+            'tags.*' => 'exists:tags,id'
         ];
     }
 }

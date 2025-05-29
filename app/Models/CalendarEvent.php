@@ -12,19 +12,49 @@ class CalendarEvent extends Model
 
     protected $fillable = [
         'activity_id',
+        'user_id',
         'start_date',
         'end_date',
-        'all_day',
+        'all_day'
     ];
 
     protected $casts = [
         'start_date' => 'date',
         'end_date' => 'date',
-        'all_day' => 'boolean',
+        'all_day' => 'boolean'
     ];
 
-    public function activity():BelongsTo
+    protected $appends = ['title', 'description', 'color', 'tag_ids'];
+
+    protected $hidden = ['activity'];
+
+    public function activity(): BelongsTo
     {
         return $this->belongsTo(Activity::class);
+    }
+
+    public function user(): BelongsTo
+    {
+        return $this->belongsTo(User::class);
+    }
+
+    public function getTitleAttribute()
+    {
+        return $this->activity->title;
+    }
+
+    public function getDescriptionAttribute()
+    {
+        return $this->activity->description;
+    }
+
+    public function getColorAttribute()
+    {
+        return $this->activity->color;
+    }
+
+    public function getTagIdsAttribute()
+    {
+        return $this->activity->tag_ids;
     }
 }

@@ -2,6 +2,7 @@
 
 namespace App\Services;
 
+use App\Interfaces\DiaryEntryRepositoryInterface;
 use App\Interfaces\DiaryEntryServiceInterface;
 use App\Models\DiaryEntry;
 use Illuminate\Database\Eloquent\Collection;
@@ -9,58 +10,56 @@ use Illuminate\Auth\Access\AuthorizationException;
 
 class DiaryEntryService implements DiaryEntryServiceInterface
 {
-    public function getUserEntries(int $userId): Collection
+    protected $repository;
+
+    public function __construct(DiaryEntryRepositoryInterface $repository)
     {
-        return DiaryEntry::where('user_id', $userId)
-            ->orderBy('entry_date', 'desc')
-            ->get();
+        $this->repository = $repository;
     }
 
-    public function getEntry(int $id, int $userId): ?DiaryEntry
+    public function getUserEntries(): Collection
     {
-        $entry = DiaryEntry::find($id);
+        return $this->repository->getAllByUser();
+    }
+
+    public function getEntry(int $id): ?DiaryEntry
+    {
+        $entry = $this->repository->getById($id);
         
-        if (!$entry || $entry->user_id !== $userId) {
+        if (!$entry) {
             throw new AuthorizationException('No estás autorizado para ver esta entrada.');
         }
 
         return $entry;
     }
 
-    public function createEntry(array $data, int $userId): DiaryEntry
+    public function createEntry(array $data): DiaryEntry
     {
-        $data['user_id'] = $userId;
-        return DiaryEntry::create($data);
+        return $this->repository->create($data);
     }
 
-    public function updateEntry(int $id, array $data, int $userId): ?DiaryEntry
+    public function updateEntry(int $id, array $data): ?DiaryEntry
     {
-        $entry = DiaryEntry::find($id);
+        $entry = $this->repository->update($id, $data);
         
-        if (!$entry || $entry->user_id !== $userId) {
+        if (!$entry) {
             throw new AuthorizationException('No estás autorizado para actualizar esta entrada.');
         }
 
-        $entry->update($data);
         return $entry;
     }
 
-    public function deleteEntry(int $id, int $userId): bool
+    public function deleteEntry(int $id): bool
     {
-        $entry = DiaryEntry::find($id);
-        
-        if (!$entry || $entry->user_id !== $userId) {
+        if (!$this->repository->delete($id)) {
             throw new AuthorizationException('No estás autorizado para eliminar esta entrada.');
         }
 
-        return $entry->delete();
+        return true;
     }
 
-    public function getEntriesByDateRange(int $userId, string $startDate, string $endDate): Collection
+    public function getEntriesByDateRange(string $startDate, string $endDate): Collection
     {
-        return DiaryEntry::where('user_id', $userId)
-            ->whereBetween('entry_date', [$startDate, $endDate])
-            ->orderBy('entry_date', 'desc')
-            ->get();
+        return $this->repository->getByDateRange($startDate, $endDate);
     }
 } 

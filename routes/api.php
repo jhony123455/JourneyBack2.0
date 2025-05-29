@@ -58,6 +58,7 @@ Route::prefix('diary-entries')->middleware('auth:api')->group(function () {
     Route::put('/{id}', [DiaryEntryController::class, 'update']);
     Route::delete('/{id}', [DiaryEntryController::class, 'destroy']);
     Route::get('/date-range', [DiaryEntryController::class, 'getByDateRange']);
+    Route::get('/diary-entries/default-colors', [DiaryEntryController::class, 'getDefaultColors']);
 });
 
 // Rutas para el perfil

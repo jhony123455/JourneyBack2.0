@@ -23,7 +23,7 @@ class UpdateProfileRequest extends FormRequest
     {
         return [
             'name' => 'sometimes|string|max:255',
-            'avatar' => 'sometimes|string|nullable',
+            'avatar' => ['sometimes', 'nullable', 'string', 'regex:/^data:image\/(jpeg|png|jpg|gif);base64,/'],
             'bio' => 'sometimes|string|nullable|max:500',
             'location' => 'sometimes|string|nullable|max:255',
             'birth_date' => 'sometimes|date|nullable',

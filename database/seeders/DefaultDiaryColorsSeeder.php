@@ -14,7 +14,8 @@ class DefaultDiaryColorsSeeder extends Seeder
         ['name' => 'Menta', 'value' => '#F5FFFA', 'textColor' => '#2E8B57'],
         ['name' => 'Durazno', 'value' => '#FFDAB9', 'textColor' => '#8B4513'],
         ['name' => 'Cielo', 'value' => '#F0F8FF', 'textColor' => '#4682B4'],
-        ['name' => 'Rosa', 'value' => '#FFF0F5', 'textColor' => '#C71585']
+        ['name' => 'Rosa', 'value' => '#FFF0F5', 'textColor' => '#C71585'],
+        ['name' => 'Limón', 'value' => '#feffae', 'textColor' => '#4B5F00']
     ];
 
     public static function createDefaultEntriesForUser(int $userId): void

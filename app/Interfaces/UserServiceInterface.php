@@ -6,7 +6,7 @@ use App\Models\User;
 
 interface UserServiceInterface
 {
-    public function getUserProfile(int $id): ?User;
-    public function updateUserProfile(int $id, array $data): User;
-    public function getUserStats(int $id): array;
+    public function getUserProfile(int $userId): User;
+    public function updateUserProfile(int $userId, array $data): User;
+    public function getUserStats(int $userId): array;
 } 

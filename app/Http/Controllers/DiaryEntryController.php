@@ -5,9 +5,9 @@ namespace App\Http\Controllers;
 use App\Http\Requests\CreateDiaryEntryRequest;
 use App\Http\Requests\UpdateDiaryEntryRequest;
 use App\Interfaces\DiaryEntryServiceInterface;
+use App\Models\DiaryEntry;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
 
 class DiaryEntryController extends Controller
 {
@@ -20,31 +20,31 @@ class DiaryEntryController extends Controller
 
     public function index(): JsonResponse
     {
-        $entries = $this->service->getUserEntries(Auth::id());
+        $entries = $this->service->getUserEntries();
         return response()->json($entries);
     }
 
     public function show(int $id): JsonResponse
     {
-        $entry = $this->service->getEntry($id, Auth::id());
+        $entry = $this->service->getEntry($id);
         return response()->json($entry);
     }
 
     public function store(CreateDiaryEntryRequest $request): JsonResponse
     {
-        $entry = $this->service->createEntry($request->validated(), Auth::id());
+        $entry = $this->service->createEntry($request->validated());
         return response()->json($entry, 201);
     }
 
     public function update(UpdateDiaryEntryRequest $request, int $id): JsonResponse
     {
-        $entry = $this->service->updateEntry($id, $request->validated(), Auth::id());
+        $entry = $this->service->updateEntry($id, $request->validated());
         return response()->json($entry);
     }
 
     public function destroy(int $id): JsonResponse
     {
-        $this->service->deleteEntry($id, Auth::id());
+        $this->service->deleteEntry($id);
         return response()->json(null, 204);
     }
 
@@ -56,11 +56,10 @@ class DiaryEntryController extends Controller
         ]);
 
         $entries = $this->service->getEntriesByDateRange(
-            Auth::id(),
             $request->start_date,
             $request->end_date
         );
 
         return response()->json($entries);
     }
-} 
+}

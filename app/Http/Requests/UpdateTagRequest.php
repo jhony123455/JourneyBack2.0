@@ -23,7 +23,8 @@ class UpdateTagRequest extends FormRequest
     {
         return [
             'name' => ['sometimes', 'string', 'max:255'],
-            'color' => ['sometimes', 'string', 'max:7'],
+            'color' => ['sometimes', 'string', 'max:30'],
+            'user_id' => ['sometimes', 'exists:users,id']
         ];
     }
 }

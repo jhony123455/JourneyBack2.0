@@ -24,6 +24,7 @@ class StoreTagRequest extends FormRequest
         return [
             'name' => ['required', 'string', 'max:255'],
             'color' => ['required', 'string', 'max:30'], // Ej: "rgba(200, 23, 213, 1)
+            'user_id' => ['required', 'exists:users,id']
         ];
     }
 }
